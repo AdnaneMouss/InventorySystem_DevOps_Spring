@@ -19,7 +19,6 @@ public class Category {
         this.id = id;
         this.catname = catname;
     }
-
     public Category() {}
 
     public int getId() {

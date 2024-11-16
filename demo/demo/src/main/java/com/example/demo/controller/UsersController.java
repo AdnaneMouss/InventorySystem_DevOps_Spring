@@ -21,7 +21,7 @@ public class UsersController {
             System.out.println(session);
             model.addAttribute("authenticatedUser", compte);
             if (compte.getType().equalsIgnoreCase("employe")) {
-                return "";
+                return "DashProds_employe";
             } else if (compte.getType().equalsIgnoreCase("admin")) {
                 return "Dashboard_Analytics";
             } else if (compte.getType().equalsIgnoreCase("fournisseur")) {
