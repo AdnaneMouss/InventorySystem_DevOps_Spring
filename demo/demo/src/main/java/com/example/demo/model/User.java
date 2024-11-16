@@ -7,7 +7,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
-    private String nom;
+    private String username;
     @Column
     private String type;
     @Column
@@ -16,8 +16,8 @@ public class User {
     private String password;
     public User() {
     }
-    public User(String nom, String email, String password, String type) {
-        this.nom = nom;
+    public User(String username, String email, String password, String type) {
+        this.username = username;
         this.email = email;
         this.password = password;
         this.type = type;
@@ -27,12 +27,6 @@ public class User {
     }
     public void setId(int id) {
         this.id = id;
-    }
-    public String getNom() {
-        return nom;
-    }
-    public void setNom(String nom) {
-        this.nom = nom;
     }
     public String getEmail() {
         return email;
@@ -52,12 +46,18 @@ public class User {
     public void setType(String type) {
         this.type = type;
     }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", nom='" + nom + '\'' +
+                ", username='" + username + '\'' +
                 ", type='" + type + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
