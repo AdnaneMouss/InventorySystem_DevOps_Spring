@@ -9,15 +9,18 @@ public class User {
     @Column
     private String nom;
     @Column
+    private String type;
+    @Column
     private String email;
     @Column
     private String password;
     public User() {
     }
-    public User(String nom, String email, String password) {
+    public User(String nom, String email, String password, String type) {
         this.nom = nom;
         this.email = email;
         this.password = password;
+        this.type = type;
     }
     public int getId() {
         return id;
@@ -43,11 +46,19 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", nom='" + nom + '\'' +
+                ", type='" + type + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
