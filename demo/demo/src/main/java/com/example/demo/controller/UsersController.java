@@ -23,7 +23,7 @@ public class UsersController {
             if (compte.getType().equalsIgnoreCase("employe")) {
                 return "DashProds_employe";
             } else if (compte.getType().equalsIgnoreCase("admin")) {
-                return "Dashboard_Analytics";
+                return "DashProds_admin";
             } else if (compte.getType().equalsIgnoreCase("fournisseur")) {
                 return "" ;
             }
