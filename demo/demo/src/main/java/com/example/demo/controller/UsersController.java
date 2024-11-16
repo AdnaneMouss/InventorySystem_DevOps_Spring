@@ -21,11 +21,11 @@ public class UsersController {
             System.out.println(session);
             model.addAttribute("authenticatedUser", compte);
             if (compte.getType().equalsIgnoreCase("employe")) {
-                return "redirect:";
-            } else if (compte.getType().equalsIgnoreCase("Admin")) {
-                return "redirect:";
+                return "";
+            } else if (compte.getType().equalsIgnoreCase("admin")) {
+                return "Dashboard_Analytics";
             } else if (compte.getType().equalsIgnoreCase("fournisseur")) {
-                return "redirect:" ;
+                return "" ;
             }
         } else {
             model.addAttribute("error", "Invalid email or password");
