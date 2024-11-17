@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 public class Command {
-private int ddd;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_command;
