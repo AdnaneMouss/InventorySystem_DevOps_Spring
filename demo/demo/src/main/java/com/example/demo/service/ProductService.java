@@ -21,8 +21,15 @@ public class ProductService {
         this.produitRepository = produitRepository;
     }
     public ProductService() {}
-    public int getAllProduits() {
-        return (int) produitRepository.count();
+    public List<Product> getAllProduits() {
+        return produitRepository.findAll();
+    }
+public Product getCheapest(){
+        return produitRepository.findCheapestProduct();
+}
+
+    public Product getPriciest() {
+        return produitRepository.findPriciestProduct();
     }
     public Optional<Product> getProduitById(Long id) {
         return produitRepository.findById((Long)id);
