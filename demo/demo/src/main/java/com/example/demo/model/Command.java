@@ -13,7 +13,7 @@ public class Command {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_command;
-
+private int details;
     @ManyToOne
     @JoinColumn(name = "id")
     private User user;
