@@ -1,5 +1,4 @@
 package com.example.demo.service;
-
 import com.example.demo.model.Category;
 import com.example.demo.model.Product;
 import com.example.demo.repository.CategoryRepository;
@@ -8,36 +7,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
-import java.util.List;
+
 @Service
 public class ProductService {
+
     @Autowired
     private CategoryRepository categorieRepository;
+
+    public ProductService() {}
+
     @Autowired
-    private ProductRepository produitRepository;
+    private ProductRepository productRepository;
     @Autowired
     private CategoryService catService;
-    public ProductService(ProductRepository produitRepository) {
-        this.produitRepository = produitRepository;
-    }
-    public ProductService() {}
-    public List<Product> getAllProduits() {
-        return produitRepository.findAll();
-    }
-public Product getCheapest(){
-        return produitRepository.findCheapestProduct();
-}
 
-    public Product getPriciest() {
-        return produitRepository.findPriciestProduct();
+    public List<Product> getAllProduits() {
+        return productRepository.findAll();
     }
+
     public Optional<Product> getProduitById(Long id) {
-        return produitRepository.findById((Long)id);
+        return productRepository.findById((Long)id);
     }
+
     public boolean createProduit(Product produit) {
         boolean res=false;
         try{
-            produitRepository.save(produit);
+            productRepository.save(produit);
             res=true;
         }
         catch(Exception e){
@@ -45,9 +40,12 @@ public Product getCheapest(){
         }
         return res;
     }
-    public Product getProductById(Long id) {
-        return produitRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+
+
+    public  Product getProductById(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
     }
+
     public Product updateProduit(int id, Product newProductData, int categoryId) {
         Product existingProduct = getProductById((long)id);
         Optional<Category> categoryOptional = catService.getCategoryById(categoryId);
@@ -60,24 +58,31 @@ public Product getCheapest(){
         existingProduct.setSize(newProductData.getSize());
         existingProduct.setCategorie(category);
         existingProduct.setPhoto(newProductData.getPhoto());
-        return produitRepository.save(existingProduct);
+        return productRepository.save(existingProduct);
     }
     public Product updateQuantity(int id, int quantity) {
         Product existingProduct = getProductById((long)id);
         Product p = new Product();
         p.setQuantity(quantity);
         existingProduct.setQuantity(p.getQuantity());
-        return produitRepository.save(existingProduct);
+        return productRepository.save(existingProduct);
     }
     public boolean deleteProduit(int id) {
         boolean res;
-        if(produitRepository.existsById((long) id)) {
-            produitRepository.deleteById((long) id);
+        if(productRepository.existsById((long) id)) {
+            productRepository.deleteById((long) id);
             res=true;
         }
         else{
+
             res=false;
         }
         return res;
+    }
+    public Product getCheapest(){
+        return productRepository.findCheapestProduct();
+    }
+    public Product getPriciest() {
+        return productRepository.findPriciestProduct();
     }
 }
