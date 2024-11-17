@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard | Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #panel {
+            background-color: #2c3e50;
+            padding: 20px;
+            color: white;
+            text-align: right;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        h3 {
+            color: #3498db;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #f2f2f2;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .button-delete {
+            background-color: #e74c3c;
+        }
+        .button-delete:hover {
+            background-color: #c0392b;
+        }
+        .form-container {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-input, .form-select {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .form-input:focus, .form-select:focus {
+            border-color: #3498db;
+        }
+        .form-actions {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div id="panel">
+    <p th:text="'Welcome, ' + ${session.authenticatedUsername}"></p>
+    <form th:action="@{/comptes/informationAdmin}" method="get">
+        <input type="hidden" name="username" th:value="${session.authenticatedUsername}">
+        <button class="button">My account</button>
+    </form>
+    <a href="/log/login" class="button button-delete">Log out</a>
+</div>
+<div class="container">
+    <section>
+        <h3>List of Products</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Label</th>
+                <th>Description</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Color</th>
+                <th>Size</th>
+                <th>Category</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="produit : ${all}">
+                <td th:text="${produit.id}"></td>
+                <td th:text="${produit.label}"></td>
+                <td th:text="${produit.description}"></td>
+                <td th:text="${produit.quantity}"></td>
+                <td th:text="${produit.price}"></td>
+                <td th:text="${produit.color}"></td>
+                <td th:text="${produit.size}"></td>
+                <td th:text="${produit.categorie?.catname}"></td>
+                <td><img th:src="${produit.photo}" alt="Product Image" width="50"></td>
+                <td>
+                    <!-- Modify button -->
+                    <form th:action="@{/products/modify}" method="post">
+                        <input type="hidden" name="id" th:value="${produit.id}" />
+                        <button type="submit" class="button">Modify</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    <section class="form-container">
+        <h3>Add New Product</h3>
+        <form th:action="@{/products/addProduct}" method="post">
+            <input type="text" name="label" placeholder="Label" class="form-input" required />
+            <input type="text" name="description" placeholder="Description" class="form-input" />
+            <input type="number" name="price" placeholder="Price" class="form-input" required />
+            <input type="text" name="color" placeholder="Color" class="form-input" />
+            <input type="text" name="photo" placeholder="Image URL" class="form-input" />
+            <select name="size" class="form-select">
+                <option value="" disabled selected>Size</option>
+                <option value="S">None</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+            </select>
+            <select name="categoryId" class="form-select">
+                <option value="" disabled selected>Category</option>
+                <option th:each="category : ${allc}" th:value="${category.id}" th:text="${category.catname}"></option>
+            </select>
+            <input type="number" name="quantity" placeholder="Stock" class="form-input" required />
+            <div class="form-actions">
+                <button type="submit" class="button">Add Product</button>
+            </div>
+        </form>
+    </section>
+</div>
+</body>
+</html>
