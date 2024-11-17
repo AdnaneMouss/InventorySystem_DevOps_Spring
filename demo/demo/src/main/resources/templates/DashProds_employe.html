@@ -119,7 +119,7 @@
                 <td><img th:src="${produit.photo}" alt="Product Image" width="50"></td>
                 <td>
                     <!-- Modify button -->
-                    <form th:action="@{/products/modify}" method="post">
+                    <form th:action="@{/product/modifyy}" method="post">
                         <input type="hidden" name="id" th:value="${produit.id}" />
                         <button type="submit" class="button">Modify</button>
                     </form>
@@ -130,7 +130,7 @@
     </section>
     <section class="form-container">
         <h3>Add New Product</h3>
-        <form th:action="@{/products/addProduct}" method="post">
+        <form th:action="@{/product/addProducts}" method="post">
             <input type="text" name="label" placeholder="Label" class="form-input" required />
             <input type="text" name="description" placeholder="Description" class="form-input" />
             <input type="number" name="price" placeholder="Price" class="form-input" required />
