@@ -21,9 +21,9 @@ public class UsersController {
             System.out.println(session);
             model.addAttribute("authenticatedUser", compte);
             if (compte.getType().equalsIgnoreCase("employe")) {
-                return "DashProds_employe";
+                return "redirect:/products/products";
             } else if (compte.getType().equalsIgnoreCase("admin")) {
-                return "DashProds_admin";
+                return "redirect:/products/catalogue";
             } else if (compte.getType().equalsIgnoreCase("fournisseur")) {
                 return "" ;
             }

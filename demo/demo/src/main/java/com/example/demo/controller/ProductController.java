@@ -62,7 +62,7 @@ public class ProductController {
         product.setDescription(description);
         product.setCategorie(category);
         productService.createProduit(product);
-        return "redirect:/products/products";
+        return "DashProds_admin";
     }
     @PostMapping("/modify")
     public String modifyProduct(@ModelAttribute Product product,@RequestParam int categoryid) {
@@ -79,6 +79,6 @@ public class ProductController {
         catch(Exception e){
             e.printStackTrace();
         }
-        return "redirect:/products/products";
+        return "DashProds_admin";
     }
 }
