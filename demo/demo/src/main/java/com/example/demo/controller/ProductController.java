@@ -67,7 +67,7 @@ public class ProductController {
     @PostMapping("/modify")
     public String modifyProduct(@ModelAttribute Product product,@RequestParam int categoryid) {
         productService.updateProduit(product.getId(), product, categoryid);
-        return "redirect:/products/products";
+        return "DashProds_admin";
     }
     @PostMapping("/delete")
     public String delete(@RequestParam int id,Model model) {
