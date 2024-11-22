@@ -24,6 +24,10 @@ public class Product {
     @JoinColumn(name="category_id")
     private Category categorie;
 
+    @ManyToOne
+    @JoinColumn(name = "id_command")
+    private Command command;
+
     public Product(int id, String label, String description, double price, String color, String photo, int quantity, String size, Category categorie) {
         this.id = id;
         this.label = label;
@@ -110,5 +114,13 @@ public class Product {
 
     public void setCategorie(Category categorie) {
         this.categorie = categorie;
+    }
+
+    public Command getCommand() {
+        return command;
+    }
+
+    public void setCommand(Command command) {
+        this.command = command;
     }
 }

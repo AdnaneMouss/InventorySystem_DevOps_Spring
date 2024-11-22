@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Dashboard | Products</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <title>Dashboard | Commands</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -83,51 +83,47 @@
 <div id="panel">
     <p th:text="'Welcome, ' + ${session.authenticatedUsername}"></p>
     <form th:action="@{/comptes/informationAdmin}" method="get">
-        <input type="hidden" name="username" th:value="${session.authenticatedUsername}">
+        <input type="hidden" name="username" th:value="${session.authenticatedUsername}" />
         <button class="button">My account</button>
     </form>
     <a href="/log/login" class="button button-delete">Log out</a>
 </div>
 
 <div class="container">
-    <!-- Section for displaying products -->
+    <!-- Section for displaying commands -->
     <section>
-        <h3>List of Products</h3>
+        <h3>List of Commands</h3>
         <table>
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Label</th>
-                <th>Description</th>
-                <th>Stock</th>
-                <th>Price</th>
-                <th>Color</th>
-                <th>Size</th>
-                <th>Category</th>
-                <th>Image</th>
+                <th>User</th>
+                <th>Products</th>
+                <th>Total Price</th>
+                <th>Date</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="produit : ${all}">
-                <td th:text="${produit.id}"></td>
-                <td th:text="${produit.label}"></td>
-                <td th:text="${produit.description}"></td>
-                <td th:text="${produit.quantity}"></td>
-                <td th:text="${produit.price}"></td>
-                <td th:text="${produit.color}"></td>
-                <td th:text="${produit.size}"></td>
-                <td th:text="${produit.categorie?.catname}"></td>
-                <td><img th:src="${produit.photo}" alt="Product Image" width="50"></td>
+            <tr th:each="command : ${allCommands}">
+                <td th:text="${command.id_command}"></td>
+                <td th:text="${command.user.username}"></td>
                 <td>
-                    <!-- Modify button -->
-                    <form th:action="@{/products/modify}" method="post">
-                        <input type="hidden" name="id" th:value="${produit.id}" />
-                        <button type="submit" class="button">Modify</button>
+                    <ul>
+                        <li th:each="product : ${command.products}" th:text="${product.label}"></li>
+                    </ul>
+                </td>
+                <td th:text="${#numbers.formatDecimal(#lists.sum(command.products?.![price]), 2)}"></td>
+                <td th:text="${command.creationDate}"></td>
+                <td>
+                    <!-- View button -->
+                    <form th:action="@{/commands/view}" method="get">
+                        <input type="hidden" name="id" th:value="${command.id_command}" />
+                        <button type="submit" class="button">View</button>
                     </form>
                     <!-- Delete button -->
-                    <form th:action="@{/products/delete}" method="post">
-                        <input type="hidden" name="id" th:value="${produit.id}" />
+                    <form th:action="@{/commands/delete}" method="post">
+                        <input type="hidden" name="id" th:value="${command.id_command}" />
                         <button type="submit" class="button button-delete">Delete</button>
                     </form>
                 </td>
@@ -136,30 +132,20 @@
         </table>
     </section>
 
-    <!-- Section for adding new product -->
+    <!-- Section for adding new command -->
     <section class="form-container">
-        <h3>Add New Product</h3>
-        <form th:action="@{/products/addProduct}" method="post">
-            <input type="text" name="label" placeholder="Label" class="form-input" required />
-            <input type="text" name="description" placeholder="Description" class="form-input" />
-            <input type="number" name="price" placeholder="Price" class="form-input" required />
-            <input type="text" name="color" placeholder="Color" class="form-input" />
-            <input type="text" name="photo" placeholder="Image URL" class="form-input" />
-            <select name="size" class="form-select">
-                <option value="" disabled selected>Size</option>
-                <option value="S">None</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
+        <h3>Add New Command</h3>
+        <form th:action="@{/commands/add}" method="post">
+            <select name="userId" class="form-select">
+                <option value="" disabled selected>Select User</option>
+                <option th:each="user : ${allUsers}" th:value="${user.id}" th:text="${user.username}"></option>
             </select>
-            <select name="categoryId" class="form-select">
-                <option value="" disabled selected>Category</option>
-                <option th:each="category : ${allc}" th:value="${category.id}" th:text="${category.catname}"></option>
+            <label>Products:</label>
+            <select name="productIds" class="form-select" multiple>
+                <option th:each="product : ${allProducts}" th:value="${product.id}" th:text="${product.label}"></option>
             </select>
-            <input type="number" name="quantity" placeholder="Stock" class="form-input" required />
             <div class="form-actions">
-                <button type="submit" class="button">Add Product</button>
+                <button type="submit" class="button">Add Command</button>
             </div>
         </form>
     </section>
