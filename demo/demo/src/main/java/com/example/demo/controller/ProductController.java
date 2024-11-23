@@ -21,11 +21,32 @@ public class ProductController {
     private ComptesService daoComptes;
     @GetMapping("/analytics")
     public String analytics(Model model) {
-        List<Product> c = productService.getAllProduits();
-        System.out.println(c);
-        model.addAttribute("product", c);
+        //Stock
+        List<Product> products= productService.getAllProduits();
+        List<String> productNames= new ArrayList<>();
+        List<Integer> productQuantity = new ArrayList<>();
+        for (Product product : products) {
+            productNames.add(product.getLabel());
+            productQuantity.add(product.getQuantity());
+        }
+        model.addAttribute("productNames", productNames);
+        model.addAttribute("productQuantity", productQuantity);
+
+        //Most sold product
+        Product cheapest = productService.getCheapest();
+        String cheapestPhoto = cheapest.getPhoto();
+        model.addAttribute("cheapestPhoto", cheapestPhoto);
+        System.out.println(cheapestPhoto);
+
+        Product priciest = productService.getPriciest();
+        String priciestPhoto = priciest.getPhoto();
+        model.addAttribute("priciestPhoto", priciestPhoto);
+        System.out.println(cheapestPhoto);
         return "Dashboard_Analytics";
     }
+
+
+
     @GetMapping("/catalogue")
     public String getAllProduits(Model model) {
         List<Product> produits = productService.getAllProduits();
