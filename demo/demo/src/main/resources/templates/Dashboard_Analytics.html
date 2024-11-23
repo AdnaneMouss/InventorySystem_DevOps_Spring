@@ -269,7 +269,7 @@
       opacity: 0.7;
       height: 300px;
   }
-  .pieChart{
+  .piechart{
       width: 280px;
       border: 3px solid white;
       border-radius: 8px;
@@ -279,11 +279,11 @@
       opacity: 0.7;
       height: 300px;
   }
-  .pieChart img{
+  .piechart img{
       width: 300px;
       height: 200px;
   }
-  .pieChart h1{
+  .piechart h1{
       text-align: center;
       color: white;
   }
@@ -293,7 +293,11 @@
   .charts{
       display:grid;
       grid-template-columns: repeat(3,1fr);
-
+  }
+  .charts2{
+      display:grid;
+      grid-template-columns: repeat(4,1fr);
+      gap:2px;
   }
 
   .navlist img {
@@ -427,19 +431,24 @@
     <div class="chart">
   <canvas id="quantity2"></canvas>
 </div>
-        <div class="piechart">
-    <h1>Cheapest Product</h1>
-      <img th:src="${cheapestPhoto}">
+<div class="piechart">
+  <canvas id="usersPerType"  height="200"></canvas>
 </div>
 
 </section>
-       <section class="charts">
-<div class="chart">
-  <canvas id="command"></canvas>
+       <section class="charts2">
+           <div class="piechart">
+    <h1>Cheapest Product</h1>
+      <img th:src="${cheapestPhoto}">
 </div>
-                       <div class="chart">
-                <canvas id="benefitsChart"></canvas>
-            </div>
+                   <div class="piechart">
+    <h1>Priciest Product</h1>
+      <img th:src="${priciestPhoto}">
+</div>
+                              <div class="piechart">
+    <h1>Priciest Product</h1>
+      <img th:src="${priciestPhoto}">
+</div>
                    <div class="piechart">
     <h1>Priciest Product</h1>
       <img th:src="${priciestPhoto}">
@@ -449,6 +458,8 @@
   </div>
 </body>
 </html>
+
+    <!-- Stock per product-->
 <script th:inline="javascript">
   /*<![CDATA[*/
   // Get data from Thymeleaf attributes
@@ -548,71 +559,31 @@
   myBarChart.options.scales.x.barPercentage = 0.9;
   /*]]>*/
 </script>
-    <script th:inline="javascript">
+
+<script th:inline="javascript">
   /*<![CDATA[*/
   // Get data from Thymeleaf attributes
-  var productNames = /*[[${productNames}]]*/ [];
-  var productQuantity = /*[[${productQuantity}]]*/ [];
+  var employeeCount = /*[[${numberOfEmployees}]]*/ '0'; // Default to '0' if not provided
+  var supplierCount = /*[[${numberOfSuppliers}]]*/ '0'; // Default to '0' if not provided
+  var adminCount = /*[[${numberOfAdmins}]]*/ '0'; // Default to '0' if not provided
 
-  // Create an array of objects to store both product names and ratings
-  var data = [];
-  for (var i = 0; i < productNames.length; i++) {
-      data.push({name: productNames[i], rating: productQuantity[i]});
-  }
-
-  // Sort the data array based on ratings in descending order
-  data.sort(function(a, b) {
-      return b.rating - a.rating;
-  });
-
-  // Extract sorted product names and ratings
-  var sortedProductNames = data.map(function(item) { return item.name; });
-  var sortedProductQuantities = data.map(function(item) { return item.rating; });
-
-  // Data for the bar chart
-  var chartData = {
-      labels: sortedProductNames,
+  // Data for the pie chart
+  var data = {
+      labels: ['Employees', 'Suppliers', 'Admins'],
       datasets: [{
-          label: 'Stock:',
-          data: sortedProductQuantities,
-          backgroundColor: 'white', // Bar color
-          borderColor: 'orangered',
+          label: 'Count',
+          data: [employeeCount, supplierCount, adminCount],
+          backgroundColor: ['black', 'orangered', 'white'], // Different colors for each category
+          borderColor: ['#FF0000', '#00FF00', '#0000FF'], // Border colors for each slice
           borderWidth: 1
       }]
   };
 
   var options = {
-      scales: {
-          y: {
-              beginAtZero: true,
-              title: {
-                  display: true,
-                  text: 'Stock',
-                  color: 'white' // Title color
-              },
-              ticks: {
-                  color: 'white' // Y-axis label color
-              }
-          },
-          x: {
-              display: false, // Hide x-axis labels
-              title: {
-                  display: false,
-                  text: 'Product',
-                  color: 'white' // Title color
-              },
-              grid: {
-                  color: 'rgba(255, 255, 255, 0.5)' // Grid line color
-              },
-              ticks: {
-                  color: 'white' // X-axis label color
-              }
-          }
-      },
       plugins: {
           title: {
               display: true,
-              text: 'Most Sold Products',
+              text: 'Users per type',
               font: {
                   size: 25,
                   weight: 'bold',
@@ -623,7 +594,7 @@
           },
           tooltip: {
               callbacks: {
-                  label: function(context) {
+                  label: function (context) {
                       return context.dataset.label + ' ' + context.formattedValue; // Display "Stock: X"
                   }
               },
@@ -633,217 +604,16 @@
       }
   };
 
-  var ctx = document.getElementById('quantity2').getContext('2d');
 
-  var myBarChart = new Chart(ctx, {
-      type: 'bar',
-      data: chartData,
+  var ctx = document.getElementById('usersPerType').getContext('2d');
+
+  var usersPerType = new Chart(ctx, {
+      type: 'pie',
+      data: data,
       options: options
   });
-
-  // Increase bar thickness
-  myBarChart.options.plugins.title.display = false;
-  myBarChart.options.scales.x.categoryPercentage = 0.9;
-  myBarChart.options.scales.x.barPercentage = 0.9;
   /*]]>*/
 </script>
-    <script th:inline="javascript">
-  /*<![CDATA[*/
-  // Get data from Thymeleaf attributes
-  var productNames = /*[[${productNames}]]*/ [];
-  var productQuantity = /*[[${productQuantity}]]*/ [];
 
-  // Create an array of objects to store both product names and ratings
-  var data = [];
-  for (var i = 0; i < productNames.length; i++) {
-      data.push({name: productNames[i], rating: productQuantity[i]});
-  }
-
-  // Sort the data array based on ratings in descending order
-  data.sort(function(a, b) {
-      return b.rating - a.rating;
-  });
-
-  // Extract sorted product names and ratings
-  var sortedProductNames = data.map(function(item) { return item.name; });
-  var sortedProductQuantities = data.map(function(item) { return item.rating; });
-
-  // Data for the bar chart
-  var chartData = {
-      labels: sortedProductNames,
-      datasets: [{
-          label: 'Stock:',
-          data: sortedProductQuantities,
-          backgroundColor: 'white', // Bar color
-          borderColor: 'orangered',
-          borderWidth: 1
-      }]
-  };
-
-  var options = {
-      scales: {
-          y: {
-              beginAtZero: true,
-              title: {
-                  display: true,
-                  text: 'Stock',
-                  color: 'white' // Title color
-              },
-              ticks: {
-                  color: 'white' // Y-axis label color
-              }
-          },
-          x: {
-              display: false, // Hide x-axis labels
-              title: {
-                  display: false,
-                  text: 'Product',
-                  color: 'white' // Title color
-              },
-              grid: {
-                  color: 'rgba(255, 255, 255, 0.5)' // Grid line color
-              },
-              ticks: {
-                  color: 'white' // X-axis label color
-              }
-          }
-      },
-      plugins: {
-          title: {
-              display: true,
-              text: 'Most Sold Products',
-              font: {
-                  size: 25,
-                  weight: 'bold',
-                  family: 'Bradley Hand'
-              },
-              align: 'left',
-              color: 'white' // Title color
-          },
-          tooltip: {
-              callbacks: {
-                  label: function(context) {
-                      return context.dataset.label + ' ' + context.formattedValue; // Display "Stock: X"
-                  }
-              },
-              titleColor: 'white', // Tooltip title color
-              bodyColor: 'white' // Tooltip body color
-          }
-      }
-  };
-
-  var ctx = document.getElementById('benefitsChart').getContext('2d');
-
-  var myBarChart = new Chart(ctx, {
-      type: 'bar',
-      data: chartData,
-      options: options
-  });
-
-  // Increase bar thickness
-  myBarChart.options.plugins.title.display = false;
-  myBarChart.options.scales.x.categoryPercentage = 0.9;
-  myBarChart.options.scales.x.barPercentage = 0.9;
-  /*]]>*/
-</script>
-    <script th:inline="javascript">
-  /*<![CDATA[*/
-  // Get data from Thymeleaf attributes
-  var productNames = /*[[${productNames}]]*/ [];
-  var productQuantity = /*[[${productQuantity}]]*/ [];
-
-  // Create an array of objects to store both product names and ratings
-  var data = [];
-  for (var i = 0; i < productNames.length; i++) {
-      data.push({name: productNames[i], rating: productQuantity[i]});
-  }
-
-  // Sort the data array based on ratings in descending order
-  data.sort(function(a, b) {
-      return b.rating - a.rating;
-  });
-
-  // Extract sorted product names and ratings
-  var sortedProductNames = data.map(function(item) { return item.name; });
-  var sortedProductQuantities = data.map(function(item) { return item.rating; });
-
-  // Data for the bar chart
-  var chartData = {
-      labels: sortedProductNames,
-      datasets: [{
-          label: 'Stock:',
-          data: sortedProductQuantities,
-          backgroundColor: 'white', // Bar color
-          borderColor: 'orangered',
-          borderWidth: 1
-      }]
-  };
-
-  var options = {
-      scales: {
-          y: {
-              beginAtZero: true,
-              title: {
-                  display: true,
-                  text: 'Stock',
-                  color: 'white' // Title color
-              },
-              ticks: {
-                  color: 'white' // Y-axis label color
-              }
-          },
-          x: {
-              display: false, // Hide x-axis labels
-              title: {
-                  display: false,
-                  text: 'Product',
-                  color: 'white' // Title color
-              },
-              grid: {
-                  color: 'rgba(255, 255, 255, 0.5)' // Grid line color
-              },
-              ticks: {
-                  color: 'white' // X-axis label color
-              }
-          }
-      },
-      plugins: {
-          title: {
-              display: true,
-              text: 'Most Sold Products',
-              font: {
-                  size: 25,
-                  weight: 'bold',
-                  family: 'Bradley Hand'
-              },
-              align: 'left',
-              color: 'white' // Title color
-          },
-          tooltip: {
-              callbacks: {
-                  label: function(context) {
-                      return context.dataset.label + ' ' + context.formattedValue; // Display "Stock: X"
-                  }
-              },
-              titleColor: 'white', // Tooltip title color
-              bodyColor: 'white' // Tooltip body color
-          }
-      }
-  };
-
-  var ctx = document.getElementById('command').getContext('2d');
-
-  var myBarChart = new Chart(ctx, {
-      type: 'bar',
-      data: chartData,
-      options: options
-  });
-
-  // Increase bar thickness
-  myBarChart.options.plugins.title.display = false;
-  myBarChart.options.scales.x.categoryPercentage = 0.9;
-  myBarChart.options.scales.x.barPercentage = 0.9;
-  /*]]>*/
-</script>
 
 </span>

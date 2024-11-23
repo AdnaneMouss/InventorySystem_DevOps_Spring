@@ -32,16 +32,26 @@ public class ProductController {
         model.addAttribute("productNames", productNames);
         model.addAttribute("productQuantity", productQuantity);
 
-        //Most sold product
+        //Cheapest product
         Product cheapest = productService.getCheapest();
         String cheapestPhoto = cheapest.getPhoto();
         model.addAttribute("cheapestPhoto", cheapestPhoto);
-        System.out.println(cheapestPhoto);
 
+        //Priciest product
         Product priciest = productService.getPriciest();
         String priciestPhoto = priciest.getPhoto();
         model.addAttribute("priciestPhoto", priciestPhoto);
-        System.out.println(cheapestPhoto);
+
+        //Number of users per type
+        int numberOfEmployees = productService.countByType("Employee");
+        int numberOfAdmins = productService.countByType("Admin");
+        int numberOfSuppliers = productService.countByType("Supplier");
+
+        model.addAttribute("numberOfEmployees", numberOfEmployees);
+        model.addAttribute("numberOfSuppliers", numberOfSuppliers);
+        model.addAttribute("numberOfAdmins", numberOfAdmins);
+System.out.println(numberOfAdmins);
+
         return "Dashboard_Analytics";
     }
 

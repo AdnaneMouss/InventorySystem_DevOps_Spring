@@ -9,4 +9,5 @@ public interface  CompteRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
     User findByEmailAndPassword(String email, String password);
     List<User> findAllByType(String type);
+    int countAllByType(String type);
 }

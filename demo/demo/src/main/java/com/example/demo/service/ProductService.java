@@ -2,6 +2,7 @@ package com.example.demo.service;
 import com.example.demo.model.Category;
 import com.example.demo.model.Product;
 import com.example.demo.repository.CategoryRepository;
+import com.example.demo.repository.CompteRepository;
 import com.example.demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private CategoryService catService;
+    @Autowired
+    private CompteRepository compteRepository;
 
     public List<Product> getAllProduits() {
         return productRepository.findAll();
@@ -84,5 +87,9 @@ public class ProductService {
     }
     public Product getPriciest() {
         return productRepository.findPriciestProduct();
+    }
+
+    public int countByType(String type){
+        return compteRepository.countAllByType(type);
     }
 }
