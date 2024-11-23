@@ -5,11 +5,16 @@ import com.example.demo.model.User;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.ComptesService;
 import com.example.demo.service.ProductService;
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/products")
 public class ProductController {
@@ -50,7 +55,22 @@ public class ProductController {
         model.addAttribute("numberOfEmployees", numberOfEmployees);
         model.addAttribute("numberOfSuppliers", numberOfSuppliers);
         model.addAttribute("numberOfAdmins", numberOfAdmins);
-System.out.println(numberOfAdmins);
+
+        //Expired products
+        List<Product> expired = productService.getExpiredProducts();
+        List<String> expiredImages = expired.stream()
+                .map(Product::getPhoto)
+                .collect(Collectors.toList());
+        model.addAttribute("expired", expired);
+        model.addAttribute("expiredImages", expiredImages);
+
+        //Number of products
+        int numberOfProducts = productService.countAll();
+        model.addAttribute("numberOfProducts",numberOfProducts);
+        System.out.println(numberOfProducts);
+
+
+
 
         return "Dashboard_Analytics";
     }

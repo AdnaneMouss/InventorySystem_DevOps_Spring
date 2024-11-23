@@ -6,8 +6,14 @@ import com.example.demo.repository.CompteRepository;
 import com.example.demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -28,6 +34,9 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public int countAll(){
+        return (int) productRepository.count();
+    }
     public Optional<Product> getProduitById(Long id) {
         return productRepository.findById((Long)id);
     }
@@ -92,4 +101,32 @@ public class ProductService {
     public int countByType(String type){
         return compteRepository.countAllByType(type);
     }
-}
+
+    public Map<String, Long> getProductCountsByCategory() {
+        List<Object[]> results = productRepository.countProductsByCategory();
+        Map<String, Long> counts = new HashMap<>();
+        for (Object[] result : results) {
+            counts.put((String) result[0], (Long) result[1]);
+        }
+        return counts;
+    }
+
+    public List<Product> getExpiredProducts() {
+        LocalDate today = LocalDate.now(); // Get today's date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Ensure consistent format
+
+        return productRepository.findAll().stream()
+                .filter(product -> {
+                    try {
+                        LocalDate expiryDate = LocalDate.parse(product.getExpiryDate(), formatter);
+                        return expiryDate.isBefore(today); // Check if expired
+                    } catch (Exception e) {
+                        // Log or handle invalid date formats
+                        return false;
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+    }
+
+

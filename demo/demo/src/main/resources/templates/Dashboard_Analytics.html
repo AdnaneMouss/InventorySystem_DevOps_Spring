@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
    <title>Dashboard | Analytics</title>
   <link rel="stylesheet" href="style.css" />
+
     <!-- Font Awesome Cdn Link -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -280,8 +281,9 @@
       height: 300px;
   }
   .piechart img{
-      width: 300px;
+      width: 230px;
       height: 200px;
+      margin-left: 20px;
   }
   .piechart h1{
       text-align: center;
@@ -330,10 +332,49 @@
       margin: 4px 2px;
       cursor: pointer;
   }
+  .image-carousel {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+  }
 
+  /* Carousel track for scrolling */
+  .carousel-track {
+      display: flex;
+      animation: scroll 15s linear infinite;
+      --image-width: 100%;
+  }
+
+  /* Each slide in the carousel */
+  .carousel-slide {
+      flex: 0 0 var(--image-width);
+  }
+
+  .carousel-slide img {
+      width: 230px;
+      height: 200px;
+      display: block;
+  }
+
+  /* Animation for scrolling effect */
+  @keyframes scroll {
+      0% {
+          transform: translateX(0);
+      }
+      100% {
+          transform: translateX(calc(-1 * var(--image-width) * var(--image-count)));
+      }
+  }
+
+  /* Pause on hover */
+  .image-carousel:hover .carousel-track {
+      animation-play-state: paused;
+  }
   </span>
 </style>
 <body>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
               <!--   <div id="panel" class="panel">
             <p th:text="${session.authenticatedUsername}"></p>
             <form th:action="@{/comptes/informationAdmin}">
@@ -391,8 +432,8 @@
             <div class="card">
           <section class="mysection">
             <div class="first">
-          <h1 style="color: white">12087 MAD</h1>
-          <h4>Net Profit</h4>
+          <h1 style="color: white" th:text="${numberOfProducts}"></h1>
+          <h4>Products</h4>
         </div>
         <div class="second">
           <img src="/profit.png">
@@ -402,8 +443,8 @@
                      <div class="card">
           <section class="mysection">
             <div class="first">
-          <h1 style="color: white">4987</h1>
-          <h4>Net Profit (2023)</h4>
+          <h1 style="color: white" th:text="${numberOfProducts}"></h1>
+          <h4>Commands</h4>
         </div>
         <div class="second">
           <img src="/profit.png">
@@ -441,17 +482,24 @@
     <h1>Cheapest Product</h1>
       <img th:src="${cheapestPhoto}">
 </div>
-                   <div class="piechart">
-    <h1>Priciest Product</h1>
-      <img th:src="${priciestPhoto}">
-</div>
+
                               <div class="piechart">
     <h1>Priciest Product</h1>
       <img th:src="${priciestPhoto}">
 </div>
+         <div class="piechart">
+                       <h1>Expired Products</h1>
+<div class="image-carousel">
+  <div class="carousel-track" th:style="'--image-count: ' + ${expiredImages.size}">
+    <div class="carousel-slide" th:each="image : ${expiredImages}">
+      <img th:src="@{${image}}" alt="Expired Product Image" />
+    </div>
+</div>
+</div>
+</div>
                    <div class="piechart">
-    <h1>Priciest Product</h1>
-      <img th:src="${priciestPhoto}">
+    <h1>cat Product</h1>
+      <canvas id="productChart" width="400" height="400"></canvas>
 </div>
 </section>
     </section>
@@ -559,7 +607,7 @@
   myBarChart.options.scales.x.barPercentage = 0.9;
   /*]]>*/
 </script>
-
+    <!-- User per type-->
 <script th:inline="javascript">
   /*<![CDATA[*/
   // Get data from Thymeleaf attributes
@@ -614,6 +662,37 @@
   });
   /*]]>*/
 </script>
+    <!-- Products per category-->
+    <script>
+        // Thymeleaf will inject the map data as JSON
+        const productsCount = /*[[${productsCount}]]*/ {};
+
+        // Convert the map into datasets for Chart.js
+        const labels = Object.keys(productsCount); // Categories
+        const data = Object.values(productsCount); // Counts
+
+        // Create a pie chart
+        const ctx = document.getElementById('productsPerCategory').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Products Count',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
 
 
 </span>

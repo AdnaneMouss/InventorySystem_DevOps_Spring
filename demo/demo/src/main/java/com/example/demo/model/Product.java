@@ -20,6 +20,8 @@ public class Product {
     private String size;
     @Column
     private int quantity;
+    @Column
+    private String expiryDate;
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category categorie;
@@ -28,7 +30,7 @@ public class Product {
     @JoinColumn(name = "id_command")
     private Command command;
 
-    public Product(int id, String label, String description, double price, String color, String photo, int quantity, String size, Category categorie) {
+    public Product(int id,String expiryDate, String label, String description, double price, String color, String photo, int quantity, String size, Category categorie) {
         this.id = id;
         this.label = label;
         this.description = description;
@@ -38,6 +40,7 @@ public class Product {
         this.size = size;
         this.categorie = categorie;
         this.quantity=quantity;
+        this.expiryDate=expiryDate;
     }
 
     public Product() {}
@@ -122,5 +125,30 @@ public class Product {
 
     public void setCommand(Command command) {
         this.command = command;
+    }
+
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", color='" + color + '\'' +
+                ", photo='" + photo + '\'' +
+                ", size='" + size + '\'' +
+                ", quantity=" + quantity +
+                ", expiryDate='" + expiryDate + '\'' +
+                ", categorie=" + categorie +
+                ", command=" + command +
+                '}';
     }
 }
