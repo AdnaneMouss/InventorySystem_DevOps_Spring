@@ -7,6 +7,10 @@ import com.example.demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +22,40 @@ public class CommandService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    public int countAll(){
+        return (int) commandRepository.count();
+    }
+
+    public int countDelivered(boolean delivered){
+        return commandRepository.countByDelivered(delivered);
+    }
+
+    public int countCommandsPerMonth(String month) {
+        int commandCount = 0;
+        List<Command> commands = commandRepository.findAll(); // Assume this method fetches all commands
+        for (Command command : commands) {
+            try {
+                LocalDateTime creationDate = command.getCreationDate();
+                if (creationDate == null) {
+                    // Skip this command and continue with the next one
+                    continue;
+                }
+                // Extract the month from the creation date
+                int commandMonth = creationDate.getMonthValue();
+                if (commandMonth == Integer.parseInt(month)) {
+                    // Count the command if it was created in the given month
+                    commandCount++;
+                }
+            } catch (Exception e) {
+                // Handle any other exceptions if necessary
+                e.printStackTrace();
+            }
+        }
+        return commandCount;
+    }
+
+
 
     // Récupérer toutes les commandes
     public List<Command> getAllCommands() {
@@ -40,7 +78,7 @@ public class CommandService {
         if (optionalCommand.isPresent()) {
             Command existingCommand = optionalCommand.get();
             existingCommand.setUser(updatedCommand.getUser());
-            existingCommand.setProducts(updatedCommand.getProducts());
+            //existingCommand.setProducts(updatedCommand.getProducts());
             return commandRepository.save(existingCommand);
         }
         return null;
@@ -60,9 +98,9 @@ public class CommandService {
         Optional<Command> optionalCommand = commandRepository.findById(commandId);
         if (optionalCommand.isPresent()) {
             Command command = optionalCommand.get();
-            product.setCommand(command); // Associe le produit à la commande
+            //product.setCommand(command); // Associe le produit à la commande
             productRepository.save(product); // Sauvegarde le produit dans le repository
-            command.getProducts().add(product); // Ajoute le produit à la liste des produits de la commande
+            //command.getProducts().add(product); // Ajoute le produit à la liste des produits de la commande
             return commandRepository.save(command); // Sauvegarde la commande mise à jour
         }
         return null;

@@ -1,5 +1,8 @@
 package com.example.demo.model;
 import jakarta.persistence.*;
+
+import java.util.List;
+
 @Entity
 @Table(name ="products")
 public class Product {
@@ -21,30 +24,41 @@ public class Product {
     @Column
     private int quantity;
     @Column
+    private String productionDate ;
+    @Column
     private String expiryDate;
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category categorie;
 
-    @ManyToOne
-    @JoinColumn(name = "id_command")
-    private Command command;
+    @OneToMany(mappedBy = "product")
+    private List<Command> command;
 
-    public Product(int id,String expiryDate, String label, String description, double price, String color, String photo, int quantity, String size, Category categorie) {
+    public Product(int id, String description, String label, double price, String color, String photo, String size, int quantity, String productionDate, String expiryDate, Category categorie, List<Command> command) {
         this.id = id;
-        this.label = label;
         this.description = description;
+        this.label = label;
         this.price = price;
         this.color = color;
         this.photo = photo;
         this.size = size;
+        this.quantity = quantity;
+        this.productionDate = productionDate;
+        this.expiryDate = expiryDate;
         this.categorie = categorie;
-        this.quantity=quantity;
-        this.expiryDate=expiryDate;
+        this.command = command;
     }
 
     public Product() {}
 
+
+    public String getProductionDate() {
+        return productionDate;
+    }
+
+    public void setProductionDate(String productionDate) {
+        this.productionDate = productionDate;
+    }
 
     public String getDescription() {
         return description;
@@ -119,11 +133,11 @@ public class Product {
         this.categorie = categorie;
     }
 
-    public Command getCommand() {
+    public List<Command> getCommand() {
         return command;
     }
 
-    public void setCommand(Command command) {
+    public void setCommand(List<Command> command) {
         this.command = command;
     }
 

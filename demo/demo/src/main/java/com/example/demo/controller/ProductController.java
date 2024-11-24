@@ -3,6 +3,7 @@ import com.example.demo.model.Category;
 import com.example.demo.model.Product;
 import com.example.demo.model.User;
 import com.example.demo.service.CategoryService;
+import com.example.demo.service.CommandService;
 import com.example.demo.service.ComptesService;
 import com.example.demo.service.ProductService;
 import org.hibernate.internal.build.AllowSysOut;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,7 +25,7 @@ public class ProductController {
     @Autowired
     private CategoryService categorieService;
     @Autowired
-    private ComptesService daoComptes;
+    private CommandService commandService;
     @GetMapping("/analytics")
     public String analytics(Model model) {
         //Stock
@@ -67,9 +69,29 @@ public class ProductController {
         //Number of products
         int numberOfProducts = productService.countAll();
         model.addAttribute("numberOfProducts",numberOfProducts);
-        System.out.println(numberOfProducts);
+        //Number of commands
+        int numberOfCommands = commandService.countAll();
+        model.addAttribute("numberOfCommands", numberOfCommands);
 
+        //delivered commands
+        int delivered = commandService.countDelivered(true);
+        int notDelivered = commandService.countDelivered(false);
+model.addAttribute("delivered", delivered);
+model.addAttribute("notDelivered", notDelivered);
 
+        //countByDate
+        model.addAttribute("january", commandService.countCommandsPerMonth("01"));
+        model.addAttribute("february", commandService.countCommandsPerMonth("02"));
+        model.addAttribute("march", commandService.countCommandsPerMonth("03"));
+        model.addAttribute("april", commandService.countCommandsPerMonth("04"));
+        model.addAttribute("may", commandService.countCommandsPerMonth("05"));
+        model.addAttribute("june", commandService.countCommandsPerMonth("06"));
+        model.addAttribute("july", commandService.countCommandsPerMonth("07"));
+        model.addAttribute("august", commandService.countCommandsPerMonth("08"));
+        model.addAttribute("september", commandService.countCommandsPerMonth("09"));
+        model.addAttribute("october", commandService.countCommandsPerMonth("10"));
+        model.addAttribute("november", commandService.countCommandsPerMonth("11"));
+        model.addAttribute("december", commandService.countCommandsPerMonth("12"));
 
 
         return "Dashboard_Analytics";
