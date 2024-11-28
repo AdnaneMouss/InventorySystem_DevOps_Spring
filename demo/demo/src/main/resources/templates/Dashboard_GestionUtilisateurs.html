@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Gestion des Utilisateurs</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h2 class="my-4">Gestion des Utilisateurs</h2>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom d'utilisateur</th>
+            <th>Email</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Boucle Thymeleaf pour afficher les utilisateurs -->
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.type}"></td>
+            <td>
+                <!-- Lien de modification -->
+                <a href="#" class="btn btn-warning btn-sm" th:href="@{/users/edit/{id}(id=${user.id})}">Modifier</a>
+                <!-- Lien de suppression -->
+                <a href="#" class="btn btn-danger btn-sm" th:href="@{/users/delete/{id}(id=${user.id})}">Supprimer</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/users/add" class="btn btn-success mt-3">Ajouter un Utilisateur</a>
+</div>
+</body>
+</html>

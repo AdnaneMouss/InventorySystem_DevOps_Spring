@@ -20,13 +20,12 @@ public class UsersController {
             session.setAttribute("authenticatedId", compte.getId());
             System.out.println(session);
             model.addAttribute("authenticatedUser", compte);
-            model.addAttribute("authenticatedUsername", compte.getUsername());
-            if (compte.getType().equalsIgnoreCase("Employee")) {
+            if (compte.getType().equalsIgnoreCase("employe")) {
                 return "redirect:/product/cataloguee";
-            } else if (compte.getType().equalsIgnoreCase("Admin")) {
+            } else if (compte.getType().equalsIgnoreCase("admin")) {
                 return "redirect:/products/catalogue";
-            } else if (compte.getType().equalsIgnoreCase("Supplier")) {
-                return "redirect:/commands/supplier/" + compte.getId() ;
+            } else if (compte.getType().equalsIgnoreCase("fournisseur")) {
+                return "" ;
             }
         } else {
             model.addAttribute("error", "Invalid email or password");
