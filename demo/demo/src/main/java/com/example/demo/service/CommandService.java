@@ -2,10 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.model.Command;
 import com.example.demo.model.Product;
+import com.example.demo.model.User;
 import com.example.demo.repository.CommandRepository;
 import com.example.demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -104,5 +106,13 @@ public class CommandService {
             return commandRepository.save(command); // Sauvegarde la commande mise à jour
         }
         return null;
+    }
+
+    public List<Command> getSupplierCommands(int id){
+        return commandRepository.findAllByUserId(id);
+    }
+
+    public void updateeCommand(Command command) {
+            commandRepository.save(command);
     }
 }

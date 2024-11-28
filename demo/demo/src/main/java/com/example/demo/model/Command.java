@@ -25,6 +25,12 @@ public class Command {
     private Product product;
 
     @Column
+    private int quantity;
+
+    @Column
+    private String deliveryDate;
+
+    @Column
     private boolean delivered;
 
     public Command(int id, User user, LocalDateTime creationDate, Product product, boolean delivered) {
@@ -39,6 +45,21 @@ public class Command {
 
     }
 
+    public String getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(String deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public int getId() {
         return id;

@@ -2,14 +2,17 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Command;
 import com.example.demo.model.Product;
+import com.example.demo.model.User;
 import com.example.demo.service.CommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/commands")
 public class CommandController {
 
@@ -55,5 +58,24 @@ public class CommandController {
     public ResponseEntity<Command> addProductToCommand(@PathVariable int id, @RequestBody Product product) {
         Command updatedCommand = commandService.addProductToCommand(id, product);
         return updatedCommand != null ? ResponseEntity.ok(updatedCommand) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/supplier/{id}")
+    public String getSuppCommands(Model model, @PathVariable("id") int id){
+        List<Command> list = commandService.getSupplierCommands(id);
+        List<Command> l = commandService.getAllCommands();
+        model.addAttribute("commands",list);
+
+        System.out.println(list.size());
+        return "Dashboard_Supplier";
+    }
+    @PostMapping("/supplier/delivered")
+    public String updateDeliveredStatus(@RequestParam int commandId) {
+        Command command = commandService.getCommandById(commandId); // Retrieve the command by ID
+        if (command != null) {
+            command.setDelivered(true); // Set delivered status to true
+            commandService.updateeCommand(command); // Save updated command
+        }
+        return "redirect:/supplier/" + command.getUser().getId(); // Redirect to the supplier's page or wherever needed
     }
 }

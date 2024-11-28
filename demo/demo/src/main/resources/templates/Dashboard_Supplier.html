@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard | Analytics</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Font Awesome Cdn Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<style>
+
+    *{
+        margin: 0;
+        padding: 0;
+        outline: none;
+        border: none;
+        text-decoration: none;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+    body {
+        background: white;
+        background-image: url('/back.jpeg');
+        background-size: cover; /* Ensures the image covers the entire screen */
+        background-position: center center; /* Centers the image */
+        background-repeat: no-repeat; /* Prevents tiling */
+    }
+
+    nav{
+        position: sticky;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        left: 0;
+        width: 90px;
+        /* width: 280px; */
+        background: linear-gradient(to bottom left, #3e362d, orangered);
+        overflow: hidden;
+        transition: 1s;
+    }
+    nav:hover{
+        width: 280px;
+        transition: 1s;
+    }
+    .logo img{
+        width: 80px;
+        height: 80px;
+    }
+    .logo span{
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 18px;
+        text-transform: uppercase;
+    }
+
+    .navlist img {
+        width: 60px; /* Adjust the width of the image */
+        height: auto;
+        border-radius: 15px;/* Maintain aspect ratio */
+    }
+
+    .main{
+        position: relative;
+        padding: 20px;
+        width: 100%;
+    }
+    .main-top i{
+        position: absolute;
+        right: 0;
+        margin: 10px 30px;
+        color: rgb(110, 109, 109);
+        cursor: pointer;
+    }
+    .main h2 {
+        font-size: 2rem;
+        color: #ff8500;
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .main h2::after {
+        content: '';
+        width: 50%;
+        height: 3px;
+        background-color: #ff8500;
+        display: block;
+        margin: 10px auto 0;
+        border-radius: 3px;
+    }
+    table {
+        width: 95%;
+        border-collapse: collapse;
+        margin-left: 20px;;
+        background: black;
+        opacity: 0.7;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    table th, table td {
+        padding: 15px;
+
+        text-align: center;
+        font-size: 1rem;
+        border-bottom: 1px solid #f0f0f0;
+        color: white;
+        font-weight: bold;
+    }
+
+    table th {
+        background-color: orange;
+        color: #333333; /* Texte noir pour contraste */
+        text-transform: uppercase;
+        font-weight: bold;
+
+    }
+
+    table tr:last-child td {
+        border-bottom: none;
+    }
+
+    table tr:hover {
+        background-color: burlywood;
+        transition: background-color 0.3s ease;
+        color: black;
+    }
+
+    /* Button Styles */
+    .btn-confirm {
+        padding: 12px 20px;
+        background-color: #ff8500;
+        color: #ffffff;
+        font-weight: bold;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-confirm:hover {
+        background-color: #e67300;
+        transform: scale(1.1);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-confirm:disabled {
+        background-color: #4caf50;
+        color: #ffffff;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Delivery Date Styles */
+    .delivery-date {
+        margin-top: 5px;
+        font-size: 0.85rem;
+        color: #4caf50;
+        display: none;
+        font-style: italic;
+    }
+    .container{
+        display: flex;
+        color: black;
+
+    }
+    .container a{
+        right: 40px;
+    }
+
+</style>
+
+<body>
+
+<div class="container">
+    <nav class="navlist">
+        <ul>
+            <a href="#" class="logo">
+                <img src="https://st4.depositphotos.com/2208684/30213/i/450/depositphotos_302139812-stock-photo-portrait-shot-smiling-businessman-wearing.jpg" onclick="togglePanel()">
+            </a>
+
+        </ul>
+    </nav>
+
+    <section class="main">
+        <h2 style="color: white">COMMANDS PAGE</h2> <h4 style="color: white">Discover fluidly crucial products' information</h4>
+        <br><br><br>
+        <h2>Listes de commandes</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Ordered product</th>
+                <th>Quantity requested</th>
+                <th>Delivery Date</th>
+                <th>Delivery status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tbody>
+            <!-- Loop through the 'commands' list and display each Command -->
+            <tr th:each="command : ${commands}" th:if="${command.delivered==true}">
+                <input type="hidden" name="id" th:value="${session.authenticatedId}">
+                <td th:text="${command.product.label}"></td>
+                <td th:text="${command.quantity}"></td>
+                <td th:text="${command.deliveryDate}"></td>
+                <form th:action="@{/supplier/delivered}" method="POST">
+                    <input type="hidden" name="commandId" th:value="${command.id}">
+                    <button type="submit">Confirm</button>
+                </form>
+            </tr>
+        </table>
+        <table>
+            <thead>
+            <tr>
+                <th>Ordered product</th>
+                <th>Quantity requested</th>
+                <th>Delivery Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tbody>
+            <!-- Loop through the 'commands' list and display each Command -->
+            <tr th:each="command : ${commands}" th:if="${command.delivered==false}">
+                <input type="hidden" name="id" th:value="${session.authenticatedId}">
+                <td th:text="${command.product.label}"></td>
+            </tr>
+        </table>
+
+
+    </section>
+    </section>
+</div>
+<script>
+    function confirmDelivery(button) {
+        // Change button state
+        button.textContent = "Delivered";
+        button.disabled = true;
+
+        // Get the current date
+        const currentDate = new Date().toLocaleDateString("en-EN", {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Show delivery date
+        const deliveryDateDiv = button.nextElementSibling;
+        deliveryDateDiv.style.display = "block";
+        deliveryDateDiv.querySelector("span").textContent = currentDate;
+    }
+</script>
+</body>
+
+</html>
