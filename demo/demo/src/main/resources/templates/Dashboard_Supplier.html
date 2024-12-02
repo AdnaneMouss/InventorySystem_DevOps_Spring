@@ -193,52 +193,58 @@
     </nav>
 
     <section class="main">
-        <h2 style="color: white">COMMANDS PAGE</h2> <h4 style="color: white">Discover fluidly crucial products' information</h4>
-        <br><br><br>
-        <h2>Listes de commandes</h2>
+        <h2 style="color: white">COMMANDS PAGE</h2> <h4 style="color: white">Confirm commands sent to you based on your availability</h4>
+        <br><br>
+        <h2 style="color: white">Requested commands</h2>
         <table>
             <thead>
             <tr>
                 <th>Ordered product</th>
                 <th>Quantity requested</th>
-                <th>Delivery Date</th>
+                <th>Preferred Delivery Date</th>
                 <th>Delivery status</th>
             </tr>
             </thead>
             <tbody>
-            <tbody>
             <!-- Loop through the 'commands' list and display each Command -->
-            <tr th:each="command : ${commands}" th:if="${command.delivered==true}">
-                <input type="hidden" name="id" th:value="${session.authenticatedId}">
+            <tr th:each="command : ${commands}" th:if="${command.delivered == false}">
                 <td th:text="${command.product.label}"></td>
                 <td th:text="${command.quantity}"></td>
                 <td th:text="${command.deliveryDate}"></td>
-                <form th:action="@{/supplier/delivered}" method="POST">
-                    <input type="hidden" name="commandId" th:value="${command.id}">
-                    <button type="submit">Confirm</button>
-                </form>
+                <td>
+                    <!-- Form to submit delivery confirmation -->
+                    <form th:action="@{/commands/supplier/delivered}" method="POST">
+                        <input type="hidden" name="commandId" th:value="${command.id}">
+                        <button class="btn-confirm" type="submit">Confirm Delivery</button>
+                    </form>
+                </td>
             </tr>
+            </tbody>
         </table>
+
+        <h2 style="color: white">Commands to deliver</h2>
         <table>
             <thead>
             <tr>
                 <th>Ordered product</th>
                 <th>Quantity requested</th>
-                <th>Delivery Date</th>
+                <th>You have to deliver this product by:</th>
             </tr>
             </thead>
             <tbody>
-            <tbody>
             <!-- Loop through the 'commands' list and display each Command -->
-            <tr th:each="command : ${commands}" th:if="${command.delivered==false}">
-                <input type="hidden" name="id" th:value="${session.authenticatedId}">
+            <tr th:each="command : ${commands}" th:if="${command.delivered == true}">
                 <td th:text="${command.product.label}"></td>
+                <td th:text="${command.quantity}"></td>
+                <td th:text="${command.deliveryDate}"></td>
             </tr>
+            </tbody>
         </table>
 
 
+
     </section>
-    </section>
+
 </div>
 <script>
     function confirmDelivery(button) {

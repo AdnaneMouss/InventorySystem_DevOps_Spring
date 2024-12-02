@@ -760,9 +760,22 @@
         responsive: true,
         maintainAspectRatio: false,
         scales: {
+            xAxes: [{
+                ticks: {
+                    color: 'white', // Change X-axis label color here
+                    font: {
+                        size: 14, // Adjust font size
+                        family: 'Arial' // Change font family
+                    }
+                },
+                gridLines: {
+                    display: false // Remove vertical grid lines
+                }
+            }],
             yAxes: [{
                 ticks: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    color: 'white' // Change Y-axis label color here
                 },
                 gridLines: {
                     display: false // Remove horizontal grid lines
@@ -804,4 +817,5 @@
         options: chartOptions
     });
 </script>
+
 </span>
