@@ -10,7 +10,7 @@ public class Command {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int idcommand;
 
     @ManyToOne
     @JoinColumn(name = "supplier")
@@ -33,8 +33,8 @@ public class Command {
     @Column
     private boolean delivered;
 
-    public Command(int id, User user, LocalDateTime creationDate, Product product, boolean delivered) {
-        this.id = id;
+    public Command(int idcommand, User user, LocalDateTime creationDate, Product product, boolean delivered) {
+        this.idcommand = idcommand;
         this.user = user;
         this.creationDate = creationDate;
         this.product = product;
@@ -62,11 +62,11 @@ public class Command {
     }
 
     public int getId() {
-        return id;
+        return idcommand;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.idcommand = idcommand;
     }
 
     public User getUser() {
@@ -104,7 +104,7 @@ public class Command {
     @Override
     public String toString() {
         return "Command{" +
-                "id=" + id +
+                "idcommand=" + idcommand +
                 ", user=" + user +
                 ", creationDate=" + creationDate +
                 ", product=" + product +

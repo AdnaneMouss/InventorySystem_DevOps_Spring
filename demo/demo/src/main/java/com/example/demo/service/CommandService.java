@@ -2,17 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.model.Command;
 import com.example.demo.model.Product;
-import com.example.demo.model.User;
 import com.example.demo.repository.CommandRepository;
 import com.example.demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,15 +70,20 @@ public class CommandService {
     }
 
     // Mettre à jour une commande
-    public Command updateCommand(int id, Command updatedCommand) {
-        Optional<Command> optionalCommand = commandRepository.findById(id);
-        if (optionalCommand.isPresent()) {
-            Command existingCommand = optionalCommand.get();
-            existingCommand.setUser(updatedCommand.getUser());
-            //existingCommand.setProducts(updatedCommand.getProducts());
-            return commandRepository.save(existingCommand);
-        }
-        return null;
+    public Command updateCommand(int id, Command newCommandData, int idcommand) {
+        // Récupérer la commande existante par son identifiant
+        Command existingCommand = getCommandById(id);
+
+        // Mettre à jour les champs de la commande
+        existingCommand.setUser(newCommandData.getUser());
+        existingCommand.setCreationDate(newCommandData.getCreationDate());
+        existingCommand.setProduct(newCommandData.getProduct());
+        existingCommand.setQuantity(newCommandData.getQuantity());
+        existingCommand.setDeliveryDate(newCommandData.getDeliveryDate());
+        existingCommand.setDelivered(newCommandData.isDelivered());
+
+        // Sauvegarder les modifications dans le repository
+        return commandRepository.save(existingCommand);
     }
 
     // Supprimer une commande
@@ -112,7 +112,7 @@ public class CommandService {
         return commandRepository.findAllByUserId(id);
     }
 
-    public void updateeCommand(Command command) {
+    public void updateCommand(Command command) {
             commandRepository.save(command);
     }
 }
