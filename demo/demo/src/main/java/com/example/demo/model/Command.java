@@ -20,10 +20,13 @@ public class Command {
     @Column
     private LocalDateTime creationDate;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
+    @ManyToMany
+    @JoinTable(
+            name = "command_product",
+            joinColumns = @JoinColumn(name = "idcommand"),
+            inverseJoinColumns = @JoinColumn(name = "id")
+    )
+    private List<Product> product;
     @Column
     private int quantity;
 
@@ -33,13 +36,7 @@ public class Command {
     @Column
     private boolean delivered;
 
-    public Command(int idcommand, User user, LocalDateTime creationDate, Product product, boolean delivered) {
-        this.idcommand = idcommand;
-        this.user = user;
-        this.creationDate = creationDate;
-        this.product = product;
-        this.delivered = delivered;
-    }
+
 
     public Command() {
 
@@ -85,13 +82,6 @@ public class Command {
         this.creationDate = creationDate;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
 
     public boolean isDelivered() {
         return delivered;
@@ -101,15 +91,30 @@ public class Command {
         this.delivered = delivered;
     }
 
-    @Override
-    public String toString() {
-        return "Command{" +
-                "idcommand=" + idcommand +
-                ", user=" + user +
-                ", creationDate=" + creationDate +
-                ", product=" + product +
-                ", delivered=" + delivered +
-                '}';
+    public Command(int idcommand, User user, LocalDateTime creationDate, List<Product> products, int quantity, String deliveryDate, boolean delivered) {
+        this.idcommand = idcommand;
+        this.user = user;
+        this.creationDate = creationDate;
+        this.product = product;
+        this.quantity = quantity;
+        this.deliveryDate = deliveryDate;
+        this.delivered = delivered;
+    }
+
+    public int getIdcommand() {
+        return idcommand;
+    }
+
+    public void setIdcommand(int idcommand) {
+        this.idcommand = idcommand;
+    }
+
+    public List<Product> getProduct() {
+        return product;
+    }
+
+    public void setProduct(List<Product> products) {
+        this.product = products;
     }
 }
 

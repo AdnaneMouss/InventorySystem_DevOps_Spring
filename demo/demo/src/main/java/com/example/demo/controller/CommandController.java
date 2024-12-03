@@ -7,6 +7,7 @@ import com.example.demo.service.CommandService;
 import com.example.demo.service.ProductService;
 import com.example.demo.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-@RestController
+@Controller
 @RequestMapping("/commands")
 public class CommandController {
 
@@ -29,10 +30,25 @@ public class CommandController {
     @GetMapping("/allcommand")
     public String getAllCommands(Model model) {
         List<Command> commands = commandService.getAllCommands();
-        List<Product> p = productService.getAllProduits();
-        model.addAttribute("allc", p);
+
+        // Calculer la somme des prix pour chaque commande
+        for (Command command : commands) {
+            double totalPrice = 0.0;
+
+            // Calcul de la somme des prix des produits
+            for (Product product : command.getProduct()) {
+                totalPrice += product.getPrice(); // Assurez-vous que getPrice() existe dans la classe Product
+            }
+
+            // Ajouter la somme au modèle pour chaque commande
+            model.addAttribute("totalPrice", totalPrice);
+        }
+
+        model.addAttribute("allCommands", commands);
         return "DashCommand_admin";
     }
+
+
 
     // Récupérer une commande par ID
     @GetMapping("/{id}")
@@ -81,7 +97,7 @@ public class CommandController {
         // Créer une nouvelle commande
         Command command = new Command();
         command.setUser(user);
-        command.setProduct(product);
+        command.setProduct((List<Product>) product);
         command.setQuantity(quantity);
         command.setDeliveryDate(deliveryDate);
         command.setCreationDate(LocalDateTime.now());
@@ -143,5 +159,22 @@ public class CommandController {
         // Retourner la vue DashCommands_admin
         return "DashCommands_admin";
     }
+    @PostMapping("/deliver/{id}")
+    public String markAsDelivered(@PathVariable int id) {
+        Command command = commandService.getCommandById(id);
+        if (command != null && !command.isDelivered()) {
+            command.setDelivered(true);
+            commandService.updateCommand(id, command, command.getId());
+        }
+        return "redirect:/commands/allcommand";
+    }
+    @GetMapping("/commands/edit/{id}")
+    public String showEditForm(@PathVariable int id, Model model) {
+        Command command = commandService.getCommandById(id);
+        model.addAttribute("command", command);
+        model.addAttribute("allProducts", productService.getAllProduits());
+        return "edit-command";
+    }
+
 
 }

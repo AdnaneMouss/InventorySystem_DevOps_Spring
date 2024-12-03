@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Dashboard | Commands</title>
+    <title>Dashboard | Admin Commands</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <style>
         body {
@@ -57,6 +57,12 @@
         .button-delete:hover {
             background-color: #c0392b;
         }
+        .button-edit {
+            background-color: #f39c12;
+        }
+        .button-edit:hover {
+            background-color: #e67e22;
+        }
         .form-container {
             margin: 20px 0;
             padding: 20px;
@@ -101,6 +107,7 @@
                 <th>Products</th>
                 <th>Total Price</th>
                 <th>Date</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -115,14 +122,20 @@
                 </td>
                 <td th:text="${#numbers.formatDecimal(#lists.sum(command.products?.![price]), 2)}"></td>
                 <td th:text="${command.creationDate}"></td>
+                <td th:text="${command.delivered ? 'Delivered' : 'Pending'}"></td>
                 <td>
                     <!-- View button -->
-                    <form th:action="@{/commands/view}" method="get">
+                    <form th:action="@{/commands/view}" method="get" style="display: inline;">
                         <input type="hidden" name="id" th:value="${command.id_command}" />
                         <button type="submit" class="button">View</button>
                     </form>
+                    <!-- Edit button -->
+                    <form th:action="@{/commands/edit/{id}(id=${command.id_command})}" method="get" style="display: inline;">
+                        <input type="hidden" name="id" th:value="${command.id_command}" />
+                        <button type="submit" class="button button-edit">Edit</button>
+                    </form>
                     <!-- Delete button -->
-                    <form th:action="@{/commands/delete}" method="post">
+                    <form th:action="@{/commands/delete}" method="post" style="display: inline;">
                         <input type="hidden" name="id" th:value="${command.id_command}" />
                         <button type="submit" class="button button-delete">Delete</button>
                     </form>

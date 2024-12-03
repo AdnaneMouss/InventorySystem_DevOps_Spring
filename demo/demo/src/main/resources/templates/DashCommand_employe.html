@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Dashboard | Commands</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <title>Dashboard | Employee Commands</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -13,15 +13,17 @@
             box-sizing: border-box;
         }
         #panel {
-            background-color: #2c3e50;
+            background-color: #34495e;
             padding: 20px;
             color: white;
-            text-align: right;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         h3 {
-            color: #3498db;
+            color: #2ecc71;
         }
         table {
             width: 100%;
@@ -37,11 +39,15 @@
             border-bottom: 1px solid #f2f2f2;
         }
         th {
-            background-color: #3498db;
+            background-color: #2ecc71;
             color: white;
         }
+        ul {
+            padding-left: 20px;
+            margin: 0;
+        }
         .button {
-            background-color: #3498db;
+            background-color: #2ecc71;
             color: white;
             padding: 10px;
             border: none;
@@ -49,6 +55,12 @@
             cursor: pointer;
         }
         .button:hover {
+            background-color: #27ae60;
+        }
+        .button-mark {
+            background-color: #3498db;
+        }
+        .button-mark:hover {
             background-color: #2980b9;
         }
         .button-delete {
@@ -64,35 +76,22 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        .form-input, .form-select {
-            width: 100%;
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        .form-input:focus, .form-select:focus {
-            border-color: #3498db;
-        }
-        .form-actions {
-            text-align: right;
-        }
     </style>
 </head>
 <body>
 <div id="panel">
-    <p th:text="'Welcome, ' + ${session.authenticatedUsername}"></p>
-    <form th:action="@{/comptes/informationAdmin}" method="get">
-        <input type="hidden" name="username" th:value="${session.authenticatedUsername}">
-        <button class="button">My account</button>
-    </form>
-    <a href="/log/login" class="button button-delete">Log out</a>
+    <div>
+        <h4 th:text="'Welcome, ' + ${session.authenticatedUsername}"></h4>
+    </div>
+    <div>
+        <a href="/log/login" class="button button-delete">Log Out</a>
+    </div>
 </div>
 
 <div class="container">
     <!-- Section for displaying commands -->
     <section>
-        <h3>List of Commands</h3>
+        <h3>Manage Commands</h3>
         <table>
             <thead>
             <tr>
@@ -100,6 +99,7 @@
                 <th>User</th>
                 <th>Products</th>
                 <th>Creation Date</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -112,32 +112,17 @@
                         <li th:each="product : ${command.products}" th:text="${product.label}"></li>
                     </ul>
                 </td>
-                <td th:text="${command.creationDate}"></td>
+                <td th:text="${#dates.format(command.creationDate, 'yyyy-MM-dd')}"></td>
+                <td th:text="${command.delivered ? 'Delivered' : 'Pending'}"></td>
                 <td>
-                    <!-- Delete button -->
-                    <form th:action="@{/commands/delete}" method="post">
-                        <input type="hidden" name="id" th:value="${command.id_command}" />
-                        <button type="submit" class="button button-delete">Delete</button>
+                    <!-- Mark as delivered button -->
+                    <form th:action="@{/commands/deliver/{id}(id=${command.id_command})}" method="post" style="display: inline;">
+                        <button type="submit" class="button button-mark" th:disabled="${command.delivered}">Mark as Delivered</button>
                     </form>
                 </td>
             </tr>
             </tbody>
         </table>
-    </section>
-
-    <!-- Section for adding new command -->
-    <section class="form-container">
-        <h3>Add New Command</h3>
-        <form th:action="@{/commands/addCommand}" method="post">
-            <input type="hidden" name="userId" th:value="${session.authenticatedUserId}" />
-            <select name="productIds" class="form-select" multiple required>
-                <option value="" disabled>Select Products</option>
-                <option th:each="product : ${allProducts}" th:value="${product.id}" th:text="${product.label}"></option>
-            </select>
-            <div class="form-actions">
-                <button type="submit" class="button">Add Command</button>
-            </div>
-        </form>
     </section>
 </div>
 </body>
