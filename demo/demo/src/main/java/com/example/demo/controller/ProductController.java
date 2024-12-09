@@ -65,21 +65,16 @@ public class ProductController {
                 .collect(Collectors.toList());
         model.addAttribute("expired", expired);
         model.addAttribute("expiredImages", expiredImages);
-
-        //Number of products
         int numberOfProducts = productService.countAll();
         model.addAttribute("numberOfProducts",numberOfProducts);
         //Number of commands
         int numberOfCommands = commandService.countAll();
         model.addAttribute("numberOfCommands", numberOfCommands);
 
-        //delivered commands
         int delivered = commandService.countDelivered(true);
         int notDelivered = commandService.countDelivered(false);
-model.addAttribute("delivered", delivered);
-model.addAttribute("notDelivered", notDelivered);
-
-        //countByDate
+        model.addAttribute("delivered", delivered);
+        model.addAttribute("notDelivered", notDelivered);
         model.addAttribute("january", commandService.countCommandsPerMonth("01"));
         model.addAttribute("february", commandService.countCommandsPerMonth("02"));
         model.addAttribute("march", commandService.countCommandsPerMonth("03"));
@@ -92,13 +87,8 @@ model.addAttribute("notDelivered", notDelivered);
         model.addAttribute("october", commandService.countCommandsPerMonth("10"));
         model.addAttribute("november", commandService.countCommandsPerMonth("11"));
         model.addAttribute("december", commandService.countCommandsPerMonth("12"));
-
-
         return "Dashboard_Analytics";
     }
-
-
-
     @GetMapping("/catalogue")
     public String getAllProduits(Model model) {
         List<Product> produits = productService.getAllProduits();
@@ -122,11 +112,16 @@ model.addAttribute("notDelivered", notDelivered);
     }
     @PostMapping("/addProduct")
     public String addProduct(@RequestParam String label, @RequestParam int price, @RequestParam String color,
-                             @RequestParam String photo, @RequestParam String size, @RequestParam int categoryId, @RequestParam int stock,@RequestParam String description) {
+                             @RequestParam String photo, @RequestParam String size, @RequestParam int categoryId,@RequestParam String expiryDate,@RequestParam String productionDate, @RequestParam int stock,@RequestParam String description) {
+        // Fetch the category object by ID
         Optional<Category> categoryOptional = categorieService.getCategoryById(categoryId);
+
         Category category = categoryOptional.get();
+
         Product product = new Product();
         product.setLabel(label);
+        product.setProductionDate(productionDate);
+        product.setExpiryDate(expiryDate);
         product.setPrice(price);
         product.setColor(color);
         product.setPhoto(photo);
@@ -134,8 +129,12 @@ model.addAttribute("notDelivered", notDelivered);
         product.setQuantity(stock);
         product.setDescription(description);
         product.setCategorie(category);
+
+        // Save the product to the database
         productService.createProduit(product);
-        return "DashProds_admin";
+
+        // Redirect to the desired page
+        return "redirect:/products/catalogue";
     }
     @PostMapping("/modify")
     public String modifyProduct(@ModelAttribute Product product,@RequestParam int categoryid) {

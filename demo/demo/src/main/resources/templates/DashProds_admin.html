@@ -105,6 +105,8 @@
                 <th>Size</th>
                 <th>Category</th>
                 <th>Image</th>
+                <th>ExpiryDate</th>
+                <th>Production date</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -116,6 +118,8 @@
                 <td th:text="${produit.quantity}"></td>
                 <td th:text="${produit.price}"></td>
                 <td th:text="${produit.color}"></td>
+                <td th:text="${produit.expiryDate}"></td>
+                <td th:text="${produit.productionDate}"></td>
                 <td th:text="${produit.size}"></td>
                 <td th:text="${produit.categorie?.catname}"></td>
                 <td><img th:src="${produit.photo}" alt="Product Image" width="50"></td>
@@ -157,7 +161,9 @@
                 <option value="" disabled selected>Category</option>
                 <option th:each="category : ${allc}" th:value="${category.id}" th:text="${category.catname}"></option>
             </select>
-            <input type="number" name="quantity" placeholder="Stock" class="form-input" required />
+            <input type="number" name="stock" placeholder="Stock" class="form-input" required />
+            <input type="text" name="expiryDate" placeholder="expirydare" class="form-input" required />
+            <input type="text" name="productionDate" placeholder="productionDate" class="form-input" required />
             <div class="form-actions">
                 <button type="submit" class="button">Add Product</button>
             </div>
