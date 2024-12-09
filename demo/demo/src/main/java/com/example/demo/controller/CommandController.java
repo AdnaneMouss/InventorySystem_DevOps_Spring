@@ -177,5 +177,21 @@ public class CommandController {
         return "edit-command";
     }
 
+        @GetMapping("/supplier/{id}")
+    public String getSuppCommands(Model model, @PathVariable("id") int id){
+        List<Command> list = commandService.getSupplierCommands(id);
+        model.addAttribute("commands",list);
+        System.out.println(list.size());
+        return "Dashboard_Supplier";
+    }
+    @PostMapping("/supplier/delivered")
+    public String updateDeliveredStatus(@RequestParam int commandId) {
+        Command command = commandService.getCommandById(commandId); // Retrieve the command by ID
+        if (command != null) {
+            command.setDelivered(true); // Set delivered status to true
+            commandService.updateeCommand(command); // Save updated command
+        }
+        return "redirect:/commands/supplier/" + command.getUser().getId(); // Redirect to the supplier's page or wherever needed
+    }
 
 }
