@@ -112,7 +112,7 @@ public class CommandService {
         return commandRepository.findAllByUserId(id);
     }
 
-    public void updateCommand(Command command) {
-            commandRepository.save(command);
+    public void updateeCommand(Command command) {
+        commandRepository.save(command);
     }
 }
