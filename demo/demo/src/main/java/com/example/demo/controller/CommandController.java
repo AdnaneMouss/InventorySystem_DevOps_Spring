@@ -113,8 +113,6 @@ public class CommandController {
         return "DashCommand_admin";
     }
 
-
-
     // Mettre à jour une commande
     @PutMapping("/commandmodif")
     public  String updateCommand(@ModelAttribute Command command, @RequestParam int idcommand) {
